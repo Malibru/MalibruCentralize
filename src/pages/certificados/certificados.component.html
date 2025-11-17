@@ -1,0 +1,43 @@
+<div class="certificados-wrapper">
+  <h2>Certificados Digitais</h2>
+
+  <div class="filters">
+    <input placeholder="Nome" [(ngModel)]="filtros.nome">
+    <input placeholder="Empresa" [(ngModel)]="filtros.empresa">
+    <input type="date" [(ngModel)]="filtros.dataIni">
+    <input type="date" [(ngModel)]="filtros.dataFim">
+    <button (click)="filtrar()">Filtrar</button>
+  </div>
+
+  <div class="novo">
+    <input placeholder="Nome Certificado" [(ngModel)]="novo.nomeCertificado">
+    <input placeholder="Nome Empresa" [(ngModel)]="novo.nomeEmp">
+    <input type="date" [(ngModel)]="novo.dataVencimento">
+    <button (click)="cadastrar()">Cadastrar</button>
+  </div>
+
+  <p *ngIf="loading">Carregando...</p>
+  <p *ngIf="errorMsg" class="error">{{ errorMsg }}</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Empresa</th>
+        <th>Vencimento</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of lista">
+        <td><input [(ngModel)]="c.nomeCertificado"></td>
+        <td><input [(ngModel)]="c.nomeEmp"></td>
+        <td><input type="date" [(ngModel)]="c.dataVencimento"></td>
+        <td>
+          <button (click)="atualizar(c)">Salvar</button>
+          <button (click)="deletar(c)">Excluir</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

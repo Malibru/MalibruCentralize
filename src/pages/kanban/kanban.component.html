@@ -1,0 +1,16 @@
+<div class="kanban">
+  <div class="column" *ngFor="let col of columns">
+    <h3>{{ col.name }}</h3>
+    <ul>
+      <li *ngFor="let item of col.items">
+        <span>{{ item.titulo }}</span>
+        <div class="actions">
+          <button (click)="move(item, col.name, 'Aberto')">Aberto</button>
+          <button (click)="move(item, col.name, 'Em Andamento')">Em Andamento</button>
+          <button (click)="move(item, col.name, 'Resolvido')">Resolvido</button>
+          <button (click)="move(item, col.name, 'Fechado')">Fechado</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

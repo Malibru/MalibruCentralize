@@ -1,0 +1,47 @@
+<div class="licencas-wrapper">
+  <h2>Licenças Office (Fichas)</h2>
+
+  <div class="filters">
+    <input placeholder="Nome" [(ngModel)]="filtros.nome">
+    <input placeholder="Email" [(ngModel)]="filtros.email">
+    <input type="date" [(ngModel)]="filtros.dataIni">
+    <input type="date" [(ngModel)]="filtros.dataFim">
+    <input type="date" [(ngModel)]="filtros.dataMin">
+    <button (click)="filtrar()">Filtrar</button>
+  </div>
+
+  <div class="novo">
+    <input placeholder="Nome" [(ngModel)]="nova.nome">
+    <input placeholder="Email" [(ngModel)]="nova.email">
+    <input placeholder="Produto" [(ngModel)]="nova.produto">
+    <input type="date" [(ngModel)]="nova.dataVencimento">
+    <button (click)="cadastrar()">Cadastrar</button>
+  </div>
+
+  <p *ngIf="loading">Carregando...</p>
+  <p *ngIf="errorMsg" class="error">{{ errorMsg }}</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Email</th>
+        <th>Produto</th>
+        <th>Vencimento</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let f of lista">
+        <td><input [(ngModel)]="f.nome"></td>
+        <td><input [(ngModel)]="f.email"></td>
+        <td><input [(ngModel)]="f.produto"></td>
+        <td><input type="date" [(ngModel)]="f.dataVencimento"></td>
+        <td>
+          <button (click)="atualizar(f)">Salvar</button>
+          <button (click)="deletar(f)">Excluir</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
