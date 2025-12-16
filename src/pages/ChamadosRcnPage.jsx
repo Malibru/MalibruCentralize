@@ -140,12 +140,12 @@ export default function ChamadosRcnPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 p-6 md:p-8">
-      <div className="mx-auto max-w-7xl space-y-8">
+    <div style={{ minHeight: "100vh" }}>
+      <div className="container" style={{ display: "grid", gap: 24 }}>
         {/* Header */}
-        <div className="space-y-2">
-          <h1 className="text-4xl font-bold tracking-tight text-foreground">Chamados RCN</h1>
-          <p className="text-muted-foreground">Gerencie os chamados da sua equipe de forma eficiente</p>
+        <div>
+          <h1 style={{ fontSize: 32, fontWeight: 700, margin: 0 }}>Chamados RCN</h1>
+          <p className="muted-text">Gerencie os chamados da sua equipe de forma eficiente</p>
         </div>
 
         {/* Formulário de Novo Chamado */}
@@ -245,7 +245,7 @@ export default function ChamadosRcnPage() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="rounded-md border">
+            <div style={{ border: "1px solid var(--color-border)", borderRadius: 12, overflow: "hidden" }}>
               <Table>
                 <TableHeader>
                   <TableRow>

@@ -1,8 +1,9 @@
 import React from "react"
 
 export function Table({ className = "", children, ...props }) {
+  const style = { width: "100%", fontSize: 14, borderCollapse: "collapse" }
   return (
-    <table className={`w-full text-sm ${className}`} {...props}>
+    <table style={style} className={className} {...props}>
       {children}
     </table>
   )
@@ -21,16 +22,27 @@ export function TableRow({ children, ...props }) {
 }
 
 export function TableHead({ className = "", children, ...props }) {
+  const style = {
+    textAlign: "left",
+    padding: "10px 12px",
+    fontWeight: 600,
+    borderBottom: "1px solid var(--color-border)",
+    backgroundColor: "rgba(255,255,255,0.06)",
+  }
   return (
-    <th className={`text-left font-medium px-3 py-2 ${className}`} {...props}>
+    <th style={style} className={className} {...props}>
       {children}
     </th>
   )
 }
 
 export function TableCell({ className = "", children, ...props }) {
+  const style = {
+    padding: "10px 12px",
+    borderBottom: "1px solid var(--color-border)",
+  }
   return (
-    <td className={`px-3 py-2 ${className}`} {...props}>
+    <td style={style} className={className} {...props}>
       {children}
     </td>
   )

@@ -1,16 +1,38 @@
 :root {
+
+  --color-primary: #06735F;     
+  --color-primary-muted: #6AA69B;
+  --color-accent: #D5D95F;       
+  --color-accent-light: #D6D982; 
+  --color-bg: #0f1413;           
+  --color-text: #F2F2F2;        
+  --color-border: rgba(255,255,255,0.12);
+
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
+  color-scheme: dark;
+  color: var(--color-text);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-muted) 100%);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+}
+
+
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.muted-text {
+  color: rgba(242, 242, 242, 0.7);
 }
 
 
