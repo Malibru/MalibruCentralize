@@ -21,7 +21,7 @@ export function Button({
     default: {
       backgroundColor: "var(--color-primary)",
       color: "var(--color-text)",
-      borderColor: "var(--color-primary)",
+      borderColor: "var(--color-border)",
     },
     outline: {
       backgroundColor: "transparent",

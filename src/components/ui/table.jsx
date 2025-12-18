@@ -27,7 +27,7 @@ export function TableHead({ className = "", children, ...props }) {
     padding: "10px 12px",
     fontWeight: 600,
     borderBottom: "1px solid var(--color-border)",
-    backgroundColor: "rgba(255,255,255,0.06)",
+    backgroundColor: "var(--color-primary-muted)",
   }
   return (
     <th style={style} className={className} {...props}>

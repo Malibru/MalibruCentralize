@@ -6,7 +6,7 @@ export function Input({ className = "", ...props }) {
     width: "100%",
     borderRadius: 8,
     border: "1px solid var(--color-border)",
-    backgroundColor: "rgba(255,255,255,0.06)",
+    backgroundColor: "var(--color-primary-muted)",
     color: "var(--color-text)",
     padding: "8px 12px",
     fontSize: 14,
