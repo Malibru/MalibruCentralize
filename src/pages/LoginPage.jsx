@@ -1,18 +1,21 @@
 "use client"
 
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
+import { setToken } from "@/lib/auth"
 
-const API_BASE = "http://localhost:8080"
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080"
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("")
+  const [login, setLogin] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const navigate = useNavigate()
 
   async function handleLogin(e) {
     e.preventDefault()
@@ -25,12 +28,18 @@ export default function LoginPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ login, senha: password }),
       })
-      const text = await resp.text()
+      const data = await resp.json().catch(async () => ({ raw: await resp.text() }))
       if (!resp.ok) {
-        setError(text || "Falha no login")
+        setError(data?.mensagem || data?.raw || "Falha no login")
         return
       }
-      alert("Login realizado com sucesso")
+      if (data?.autenticado ?? data?.isAutenticado) {
+        const token = data?.token || data?.jwt || data?.accessToken || data?.tokenJwt
+        if (token) setToken(token)
+        navigate("/chamados")
+      } else {
+        setError(data?.mensagem || "Credenciais inválidas")
+      }
    
     } catch (err) {
       setError("Erro ao conectar com o servidor")
@@ -64,13 +73,13 @@ export default function LoginPage() {
           <CardContent>
             <form onSubmit={handleLogin} className="grid gap-6">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="login">Login</Label>
                 <Input
-                  id="email"
-                  type="email"
-                  placeholder="voce@empresa.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  id="login"
+                  type="text"
+                  placeholder="seu_login"
+                  value={login}
+                  onChange={(e) => setLogin(e.target.value)}
                   required
                 />
               </div>

@@ -1,8 +1,11 @@
 "use client"
-import { Link, NavLink } from "react-router-dom"
+import { Link, NavLink, useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
+import { AuthService } from "@/services/auth"
+import { isAuthenticated, clearToken } from "@/lib/auth"
 
 export default function Header() {
+  const navigate = useNavigate()
   const headerStyle = {
     position: "sticky",
     top: 0,
@@ -132,6 +135,19 @@ export default function Header() {
           >
             Sistema
           </NavLink>
+          {isAuthenticated() ? (
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={async () => {
+                try { await AuthService.logout() } catch {}
+                clearToken()
+                navigate('/login')
+              }}
+            >
+              Sair
+            </Button>
+          ) : null}
         </nav>
       </div>
     </header>

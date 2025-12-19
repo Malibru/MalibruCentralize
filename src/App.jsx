@@ -8,6 +8,7 @@ import CertificadosPage from './pages/CertificadosPage'
 import LicencasOfficePage from './pages/LicencasOfficePage'
 import UsuariosPage from './pages/UsuariosPage'
 import SystemInfoPage from './pages/SystemInfoPage'
+import ProtectedRoute from './routes/ProtectedRoute'
 
 function App() {
   return (
@@ -17,12 +18,12 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/chamados" element={<ChamadosRcnPage />} />
-          <Route path="/equipamentos" element={<EquipamentosPage />} />
-          <Route path="/certificados" element={<CertificadosPage />} />
-          <Route path="/licencas" element={<LicencasOfficePage />} />
-          <Route path="/usuarios" element={<UsuariosPage />} />
-          <Route path="/system-info" element={<SystemInfoPage />} />
+          <Route path="/chamados" element={<ProtectedRoute><ChamadosRcnPage /></ProtectedRoute>} />
+          <Route path="/equipamentos" element={<ProtectedRoute><EquipamentosPage /></ProtectedRoute>} />
+          <Route path="/certificados" element={<ProtectedRoute><CertificadosPage /></ProtectedRoute>} />
+          <Route path="/licencas" element={<ProtectedRoute><LicencasOfficePage /></ProtectedRoute>} />
+          <Route path="/usuarios" element={<ProtectedRoute><UsuariosPage /></ProtectedRoute>} />
+          <Route path="/system-info" element={<ProtectedRoute><SystemInfoPage /></ProtectedRoute>} />
           <Route path="*" element={<div>Página não encontrada</div>} />
         </Routes>
       </main>

@@ -8,8 +8,9 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
+import { api } from "@/lib/apiClient"
 
-const API_BASE = "http://localhost:8080"
+// Usa api client com Authorization automático
 
 export default function ChamadosRcnPage() {
   const [chamados, setChamados] = useState([])
@@ -28,17 +29,13 @@ export default function ChamadosRcnPage() {
   async function carregarChamados(p = 0) {
     setLoading(true)
     try {
-      const resp = await fetch(`${API_BASE}/Listar/ListarChamadosRcnPaginado?page=${p}&size=10&sort=ticket&dir=asc`)
-      if (!resp.ok) {
-        alert("Erro ao listar chamados")
-        return
-      }
-      const data = await resp.json()
-      setChamados(data.content || [])
-      setPage(data.number || 0)
-      setTotalPages(data.totalPages || 1)
+      const data = await api.get(`/Listar/ListarChamadosRcnPaginado?page=${p}&size=10&sort=ticket&dir=asc`)
+      setChamados(data?.content || [])
+      setPage(data?.number ?? 0)
+      setTotalPages(data?.totalPages ?? 1)
     } catch (error) {
-      alert("Erro ao conectar com o servidor")
+      const msg = error?.data?.mensagem || error?.data || String(error)
+      alert(`Erro ao listar chamados: ${msg}`)
     } finally {
       setLoading(false)
     }
@@ -60,18 +57,10 @@ export default function ChamadosRcnPage() {
     }
 
     try {
-      const resp = await fetch(`${API_BASE}/Cadastrar/CadastrarChamado`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      })
-
-      const text = await resp.text()
-      if (!resp.ok) {
-        alert("Erro ao cadastrar: " + text)
-        return
-      }
-      alert(text)
+      const text = await api.post(`/Cadastrar/CadastrarChamado`, body)
+      // Quando API retorna texto, o api client pode trazer string; se for objeto, tenta mensagem
+      const okMsg = typeof text === 'string' ? text : (text?.mensagem || 'Cadastrado com sucesso')
+      alert(okMsg)
       setNovoChamado({
         ticket: "",
         responsavel: "",
@@ -81,7 +70,8 @@ export default function ChamadosRcnPage() {
       })
       carregarChamados(page)
     } catch (error) {
-      alert("Erro ao conectar com o servidor")
+      const msg = error?.data?.mensagem || error?.data || String(error)
+      alert("Erro ao cadastrar: " + msg)
     }
   }
 
@@ -92,21 +82,13 @@ export default function ChamadosRcnPage() {
     }
 
     try {
-      const resp = await fetch(`${API_BASE}/Atualizar/AtualizarUmChamado/${encodeURIComponent(ticket)}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      })
-
-      const text = await resp.text()
-      if (!resp.ok) {
-        alert("Erro ao atualizar: " + text)
-        return
-      }
-      alert(text)
+      const text = await api.patch(`/Atualizar/AtualizarUmChamado/${encodeURIComponent(ticket)}`, body)
+      const okMsg = typeof text === 'string' ? text : (text?.mensagem || 'Atualizado com sucesso')
+      alert(okMsg)
       carregarChamados(page)
     } catch (error) {
-      alert("Erro ao conectar com o servidor")
+      const msg = error?.data?.mensagem || error?.data || String(error)
+      alert("Erro ao atualizar: " + msg)
     }
   }
 
@@ -115,18 +97,13 @@ export default function ChamadosRcnPage() {
       return
     }
     try {
-      const resp = await fetch(`${API_BASE}/Deletar/DeletarChamado/${encodeURIComponent(ticket)}`, {
-        method: "DELETE",
-      })
-      const text = await resp.text()
-      if (!resp.ok) {
-        alert("Erro ao deletar: " + text)
-        return
-      }
-      alert(text)
+      const text = await api.del(`/Deletar/DeletarChamado/${encodeURIComponent(ticket)}`)
+      const okMsg = typeof text === 'string' ? text : (text?.mensagem || 'Deletado com sucesso')
+      alert(okMsg)
       carregarChamados(page)
     } catch (error) {
-      alert("Erro ao conectar com o servidor")
+      const msg = error?.data?.mensagem || error?.data || String(error)
+      alert("Erro ao deletar: " + msg)
     }
   }
 
