@@ -7,6 +7,7 @@ import CertificadosPage from './pages/CertificadosPage'
 import LicencasOfficePage from './pages/LicencasOfficePage'
 import UsuariosPage from './pages/UsuariosPage'
 import SystemInfoPage from './pages/SystemInfoPage'
+import MonitoramentoPage from './pages/MonitoramentoPage'
 import ProtectedRoute from './routes/ProtectedRoute'
 import Layout from './components/Layout'
 import HomePage from './pages/HomePage'
@@ -26,6 +27,7 @@ function App() {
           <Route path="/licencas" element={<ProtectedRoute><Layout><LicencasOfficePage /></Layout></ProtectedRoute>} />
           <Route path="/usuarios" element={<ProtectedRoute><Layout><UsuariosPage /></Layout></ProtectedRoute>} />
           <Route path="/system-info" element={<ProtectedRoute><Layout><SystemInfoPage /></Layout></ProtectedRoute>} />
+          <Route path="/monitoramento" element={<ProtectedRoute><Layout><MonitoramentoPage /></Layout></ProtectedRoute>} />
           <Route path="*" element={<div>Página não encontrada</div>} />
         </Routes>
     </div>
