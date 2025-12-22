@@ -6,7 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-import { setToken } from "@/lib/auth"
+import { setToken, setUser } from "@/lib/auth"
+import MinimalHeader from "@/components/MinimalHeader"
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080"
 
@@ -36,7 +37,9 @@ export default function LoginPage() {
       if (data?.autenticado ?? data?.isAutenticado) {
         const token = data?.token || data?.jwt || data?.accessToken || data?.tokenJwt
         if (token) setToken(token)
-        navigate("/chamados")
+        const user = data?.usuario || data?.user || data?.pessoa || { login }
+        setUser(user)
+        navigate("/home")
       } else {
         setError(data?.mensagem || "Credenciais inválidas")
       }
@@ -49,10 +52,12 @@ export default function LoginPage() {
   }
 
   return (
+    <>
+    <MinimalHeader />
     <div
       style={{
         minHeight: "100vh",
-        background: "linear-gradient(135deg, rgba(18,18,18,1), rgba(60,60,60,0.2))",
+        background: "var(--color-bg)",
         padding: "24px",
         display: "flex",
         alignItems: "center",
@@ -61,11 +66,11 @@ export default function LoginPage() {
     >
       <div style={{ width: "100%", maxWidth: 420 }}>
         <div style={{ marginBottom: 16 }}>
-          <h1 style={{ fontSize: 32, fontWeight: 700, color: "#fff", margin: 0 }}>Bem-vindo</h1>
-          <p style={{ color: "#bbb", marginTop: 4 }}>Acesse sua conta para continuar</p>
+          <h1 style={{ fontSize: 32, fontWeight: 700, color: "var(--color-text)", margin: 0 }}>Bem-vindo</h1>
+          <p className="muted-text" style={{ marginTop: 4 }}>Acesse sua conta para continuar</p>
         </div>
 
-        <Card style={{ backdropFilter: "blur(6px)", borderColor: "#3a3a3a", backgroundColor: "rgba(255,255,255,0.05)" }}>
+        <Card style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-primary-muted)" }}>
           <CardHeader>
             <CardTitle>Login</CardTitle>
             <CardDescription>Informe suas credenciais abaixo</CardDescription>
@@ -108,9 +113,10 @@ export default function LoginPage() {
         </Card>
 
         <p style={{ color: "#888", fontSize: 12, marginTop: 12 }}>
-          Dica: use o mesmo esquema visual da página de chamados para manter consistência.
+         Sistema Malibru Centralize
         </p>
       </div>
     </div>
+    </>
   )
 }

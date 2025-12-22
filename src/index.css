@@ -1,10 +1,10 @@
 :root {
 
-  /* Paleta minimalista clara */
+
   --color-primary: #FFFFFF;          /* branco principal */
   --color-primary-muted: #F7F7F7;    /* branco suave para superfícies */
-  --color-accent: #EFEFEF;           /* acento sutil em cinza claro */
-  --color-accent-light: #F5F5F5;     /* variação ainda mais clara */
+  --color-accent: #2563EB;           /* azul moderno para acento */
+  --color-accent-light: #E8F0FE;     /* variação clara do acento */
   --color-bg: #FFFFFF;               /* fundo branco */
   --color-text: #1A1A1A;             /* texto em cinza quase preto */
   --color-border: rgba(0,0,0,0.08);   /* borda suave */

@@ -1,8 +1,8 @@
 "use client"
-import { Link, NavLink, useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { AuthService } from "@/services/auth"
-import { isAuthenticated, clearToken } from "@/lib/auth"
+import { isAuthenticated, clearToken, getUser, clearUser } from "@/lib/auth"
 
 export default function Header() {
   const navigate = useNavigate()
@@ -49,18 +49,9 @@ export default function Header() {
   const subtitleStyle = { fontSize: 11, opacity: 0.75, margin: 0 }
 
   const navStyle = { display: "flex", alignItems: "center", gap: 8 }
-  const linkStyle = {
-    padding: "6px 10px",
-    borderRadius: 8,
-    textDecoration: "none",
-    color: "var(--color-text)",
-    border: "1px solid var(--color-border)",
-  }
-  const linkActiveStyle = {
-    backgroundColor: "var(--color-primary)",
-    borderColor: "var(--color-primary)",
-    color: "var(--color-text)",
-  }
+  const pillStyle = { padding: "6px 10px", borderRadius: 999, border: "1px solid var(--color-border)" }
+  const user = getUser() || {}
+  const userLabel = user?.nome || user?.name || user?.login || "Usuário"
 
   return (
     <header style={headerStyle}>
@@ -91,63 +82,27 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Navegação */}
+        {/* Ações do usuário */}
         <nav style={navStyle}>
-          <NavLink
-            to="/login"
-            style={({ isActive }) => ({ ...linkStyle, ...(isActive ? linkActiveStyle : {}) })}
-          >
-            Login
-          </NavLink>
-          <NavLink
-            to="/chamados"
-            style={({ isActive }) => ({ ...linkStyle, ...(isActive ? linkActiveStyle : {}) })}
-          >
-            Chamados
-          </NavLink>
-          <NavLink
-            to="/equipamentos"
-            style={({ isActive }) => ({ ...linkStyle, ...(isActive ? linkActiveStyle : {}) })}
-          >
-            Equipamentos
-          </NavLink>
-          <NavLink
-            to="/certificados"
-            style={({ isActive }) => ({ ...linkStyle, ...(isActive ? linkActiveStyle : {}) })}
-          >
-            Certificados
-          </NavLink>
-          <NavLink
-            to="/licencas"
-            style={({ isActive }) => ({ ...linkStyle, ...(isActive ? linkActiveStyle : {}) })}
-          >
-            Licenças
-          </NavLink>
-          <NavLink
-            to="/usuarios"
-            style={({ isActive }) => ({ ...linkStyle, ...(isActive ? linkActiveStyle : {}) })}
-          >
-            Usuários
-          </NavLink>
-          <NavLink
-            to="/system-info"
-            style={({ isActive }) => ({ ...linkStyle, ...(isActive ? linkActiveStyle : {}) })}
-          >
-            Sistema
-          </NavLink>
           {isAuthenticated() ? (
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={async () => {
-                try { await AuthService.logout() } catch {}
-                clearToken()
-                navigate('/login')
-              }}
-            >
-              Sair
-            </Button>
-          ) : null}
+            <>
+              <span style={pillStyle}>{userLabel}</span>
+              <Button size="sm" variant="outline" onClick={() => navigate('/perfil')}>Perfil</Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={async () => {
+                  try { await AuthService.logout() } catch {}
+                  clearToken(); clearUser();
+                  navigate('/login')
+                }}
+              >
+                Sair
+              </Button>
+            </>
+          ) : (
+            <Button size="sm" variant="outline" onClick={() => navigate('/login')}>Login</Button>
+          )}
         </nav>
       </div>
     </header>
