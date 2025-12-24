@@ -31,7 +31,6 @@ export default function Sidebar() {
         <NavLink to="/certificados" style={({isActive}) => ({...itemStyle, ...(isActive ? activeStyle : {})})}>Certificados</NavLink>
         <NavLink to="/licencas" style={({isActive}) => ({...itemStyle, ...(isActive ? activeStyle : {})})}>Licenças</NavLink>
         <NavLink to="/usuarios" style={({isActive}) => ({...itemStyle, ...(isActive ? activeStyle : {})})}>Usuários</NavLink>
-        <NavLink to="/monitoramento" style={({isActive}) => ({...itemStyle, ...(isActive ? activeStyle : {})})}>Monitoramento</NavLink>
         <NavLink to="/system-info" style={({isActive}) => ({...itemStyle, ...(isActive ? activeStyle : {})})}>Sistema</NavLink>
       </nav>
     </aside>

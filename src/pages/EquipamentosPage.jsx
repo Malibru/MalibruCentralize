@@ -19,21 +19,6 @@ export default function EquipamentosPage() {
   const [quantidade, setQuantidade] = useState('')
   const [sort, setSort] = useState('')
   const [dir, setDir] = useState('asc')
-  const [disponivel, setDisponivel] = useState('')
-
-  // Forms CRUD
-  const [successMsg, setSuccessMsg] = useState('')
-  const [crNome, setCrNome] = useState('')
-  const [crDescricao, setCrDescricao] = useState('')
-  const [crQuantidade, setCrQuantidade] = useState('')
-  const [crNumeroSerie, setCrNumeroSerie] = useState('')
-  const [crDisp, setCrDisp] = useState('true')
-  const [upNome, setUpNome] = useState('')
-  const [upDescricao, setUpDescricao] = useState('')
-  const [upQuantidade, setUpQuantidade] = useState('')
-  const [upNumeroSerie, setUpNumeroSerie] = useState('')
-  const [upDisp, setUpDisp] = useState('')
-  const [delNome, setDelNome] = useState('')
 
   async function carregar(p = page) {
     setLoading(true)
@@ -73,10 +58,6 @@ export default function EquipamentosPage() {
         setPage(d?.number ?? p)
       } else if (filterType === 'numeroSerieParcial') {
         const d = await EquipamentosService.buscarPorNumeroSerieParcial(numeroSerie)
-        setItems(Array.isArray(d) ? d : [])
-        setTotalPages(1)
-      } else if (filterType === 'disponivel') {
-        const d = await EquipamentosService.buscarPorDisponivel(disponivel === 'true')
         setItems(Array.isArray(d) ? d : [])
         setTotalPages(1)
       }
@@ -139,7 +120,6 @@ export default function EquipamentosPage() {
                   <SelectItem value="nomeParcial">Por nome parcial</SelectItem>
                   <SelectItem value="nomeParcialPaginado">Por nome parcial (paginado)</SelectItem>
                   <SelectItem value="numeroSerieParcial">Por número de série parcial</SelectItem>
-                  <SelectItem value="disponivel">Por disponibilidade</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -162,21 +142,6 @@ export default function EquipamentosPage() {
               <div>
                 <label style={{ fontSize: 12, color: '#666' }}>Quantidade</label>
                 <Input type="number" placeholder="Ex.: 5" value={quantidade} onChange={(e) => setQuantidade(e.target.value)} />
-              </div>
-            )}
-
-            {filterType === 'disponivel' && (
-              <div>
-                <label style={{ fontSize: 12, color: '#666' }}>Disponibilidade</label>
-                <Select value={disponivel} onValueChange={setDisponivel}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="true">Disponível</SelectItem>
-                    <SelectItem value="false">Indisponível</SelectItem>
-                  </SelectContent>
-                </Select>
               </div>
             )}
 
@@ -242,111 +207,6 @@ export default function EquipamentosPage() {
             </div>
           </div>
         )}
-
-        {/* CRUD rápido */}
-        <div style={{ marginTop: 16 }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 12 }}>
-            <div style={{ border: '1px solid var(--color-border)', borderRadius: 12, padding: 12 }}>
-              <div style={{ fontWeight: 600, marginBottom: 8 }}>Cadastrar</div>
-              <div style={{ display: 'grid', gap: 8 }}>
-                <Input placeholder="Nome" value={crNome} onChange={(e) => setCrNome(e.target.value)} />
-                <Input placeholder="Descrição" value={crDescricao} onChange={(e) => setCrDescricao(e.target.value)} />
-                <Input placeholder="Quantidade" type="number" value={crQuantidade} onChange={(e) => setCrQuantidade(e.target.value)} />
-                <Input placeholder="Número de Série" value={crNumeroSerie} onChange={(e) => setCrNumeroSerie(e.target.value)} />
-                <Select value={crDisp} onValueChange={setCrDisp}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Disponível" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="true">Sim</SelectItem>
-                    <SelectItem value="false">Não</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Button
-                  onClick={async () => {
-                    setSuccessMsg('')
-                    if (!crNome) { setSuccessMsg('Informe o nome para cadastrar.'); return }
-                    try {
-                      const payload = {
-                        nome: crNome,
-                        descricao: crDescricao || undefined,
-                        quantidade: crQuantidade !== '' ? Number(crQuantidade) : undefined,
-                        numeroSerie: crNumeroSerie || undefined,
-                        disponivel: crDisp === 'true',
-                      }
-                      const res = await EquipamentosService.cadastrarEquipamento(payload)
-                      setSuccessMsg(typeof res === 'string' ? res : 'Cadastrado com sucesso.')
-                      carregar(0)
-                    } catch (e) {
-                      setSuccessMsg(e?.status === 403 ? 'Acesso negado.' : e?.message || 'Erro ao cadastrar.')
-                    }
-                  }}
-                >Cadastrar</Button>
-              </div>
-            </div>
-
-            <div style={{ border: '1px solid var(--color-border)', borderRadius: 12, padding: 12 }}>
-              <div style={{ fontWeight: 600, marginBottom: 8 }}>Atualizar</div>
-              <div style={{ display: 'grid', gap: 8 }}>
-                <Input placeholder="Nome (chave)" value={upNome} onChange={(e) => setUpNome(e.target.value)} />
-                <Input placeholder="Descrição" value={upDescricao} onChange={(e) => setUpDescricao(e.target.value)} />
-                <Input placeholder="Quantidade" type="number" value={upQuantidade} onChange={(e) => setUpQuantidade(e.target.value)} />
-                <Input placeholder="Número de Série" value={upNumeroSerie} onChange={(e) => setUpNumeroSerie(e.target.value)} />
-                <Select value={upDisp} onValueChange={setUpDisp}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="(sem alteração)" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="">(sem alteração)</SelectItem>
-                    <SelectItem value="true">Sim</SelectItem>
-                    <SelectItem value="false">Não</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Button
-                  onClick={async () => {
-                    setSuccessMsg('')
-                    if (!upNome) { setSuccessMsg('Informe o nome para atualizar.'); return }
-                    try {
-                      const payload = {}
-                      if (upDescricao) payload.descricao = upDescricao
-                      if (upQuantidade !== '') payload.quantidade = Number(upQuantidade)
-                      if (upNumeroSerie) payload.numeroSerie = upNumeroSerie
-                      if (upDisp !== '') payload.disponivel = (upDisp === 'true')
-                      const res = await EquipamentosService.atualizarEquipamento(upNome, payload)
-                      setSuccessMsg(typeof res === 'string' ? res : 'Atualizado com sucesso.')
-                      carregar(0)
-                    } catch (e) {
-                      setSuccessMsg(e?.status === 404 ? 'Equipamento não encontrado.' : e?.status === 403 ? 'Acesso negado.' : e?.message || 'Erro ao atualizar.')
-                    }
-                  }}
-                >Atualizar</Button>
-              </div>
-            </div>
-
-            <div style={{ border: '1px solid var(--color-border)', borderRadius: 12, padding: 12 }}>
-              <div style={{ fontWeight: 600, marginBottom: 8 }}>Deletar</div>
-              <div style={{ display: 'grid', gap: 8 }}>
-                <Input placeholder="Nome (chave)" value={delNome} onChange={(e) => setDelNome(e.target.value)} />
-                <Button
-                  variant="destructive"
-                  onClick={async () => {
-                    setSuccessMsg('')
-                    if (!delNome) { setSuccessMsg('Informe o nome para deletar.'); return }
-                    try {
-                      const res = await EquipamentosService.deletarEquipamento(delNome)
-                      setSuccessMsg(typeof res === 'string' ? res : 'Deletado com sucesso.')
-                      carregar(0)
-                    } catch (e) {
-                      setSuccessMsg(e?.status === 404 ? 'Equipamento não encontrado.' : e?.status === 403 ? 'Acesso negado.' : e?.message || 'Erro ao deletar.')
-                    }
-                  }}
-                >Deletar</Button>
-              </div>
-            </div>
-          </div>
-          <div style={{ marginTop: 8, minHeight: 20, fontSize: 12, color: '#555' }}>{successMsg}</div>
-        </div>
-
       </CardContent>
     </Card>
   )

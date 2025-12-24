@@ -1,49 +1,70 @@
-import React from "react"
+import * as React from "react";
 
-export function Table({ className = "", children, ...props }) {
-  const style = { width: "100%", fontSize: 14, borderCollapse: "collapse" }
-  return (
-    <table style={style} className={className} {...props}>
-      {children}
-    </table>
-  )
-}
+import { cn } from "@/lib/utils";
 
-export function TableHeader({ children, ...props }) {
-  return <thead {...props}>{children}</thead>
-}
+const Table = React.forwardRef(({ className, ...props }, ref) => (
+    <div className="relative w-full overflow-auto">
+      <table ref={ref} className={cn("w-full caption-bottom text-sm", className)} {...props} />
+    </div>
+  ),
+);
+Table.displayName = "Table";
 
-export function TableBody({ children, ...props }) {
-  return <tbody {...props}>{children}</tbody>
-}
+const TableHeader = React.forwardRef(({ className, ...props }, ref) => <thead ref={ref} className={cn("[&_tr]:border-b", className)} {...props} />,
+);
+TableHeader.displayName = "TableHeader";
 
-export function TableRow({ children, ...props }) {
-  return <tr {...props}>{children}</tr>
-}
+const TableBody = React.forwardRef(
+  ({ className, ...props }, ref) => (
+    <tbody ref={ref} className={cn("[&_tr:last-child]:border-0", className)} {...props} />
+  ),
+);
+TableBody.displayName = "TableBody";
 
-export function TableHead({ className = "", children, ...props }) {
-  const style = {
-    textAlign: "left",
-    padding: "10px 12px",
-    fontWeight: 600,
-    borderBottom: "1px solid var(--color-border)",
-    backgroundColor: "var(--color-primary-muted)",
-  }
-  return (
-    <th style={style} className={className} {...props}>
-      {children}
-    </th>
-  )
-}
+const TableFooter = React.forwardRef(
+  ({ className, ...props }, ref) => (
+    <tfoot ref={ref} className={cn("border-t bg-muted/50 font-medium [&>tr]:last:border-b-0", className)} {...props} />
+  ),
+);
+TableFooter.displayName = "TableFooter";
 
-export function TableCell({ className = "", children, ...props }) {
-  const style = {
-    padding: "10px 12px",
-    borderBottom: "1px solid var(--color-border)",
-  }
-  return (
-    <td style={style} className={className} {...props}>
-      {children}
-    </td>
-  )
-}
+const TableRow = React.forwardRef(
+  ({ className, ...props }, ref) => (
+    <tr
+      ref={ref}
+      className={cn("border-b transition-colors data-[state=selected]:bg-muted hover:bg-muted/50", className)}
+      {...props}
+    />
+  ),
+);
+TableRow.displayName = "TableRow";
+
+const TableHead = React.forwardRef(
+  ({ className, ...props }, ref) => (
+    <th
+      ref={ref}
+      className={cn(
+        "h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0",
+        className,
+      )}
+      {...props}
+    />
+  ),
+);
+TableHead.displayName = "TableHead";
+
+const TableCell = React.forwardRef(
+  ({ className, ...props }, ref) => (
+    <td ref={ref} className={cn("p-4 align-middle [&:has([role=checkbox])]:pr-0", className)} {...props} />
+  ),
+);
+TableCell.displayName = "TableCell";
+
+const TableCaption = React.forwardRef(
+  ({ className, ...props }, ref) => (
+    <caption ref={ref} className={cn("mt-4 text-sm text-muted-foreground", className)} {...props} />
+  ),
+);
+TableCaption.displayName = "TableCaption";
+
+export { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption };

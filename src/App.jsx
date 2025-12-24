@@ -1,37 +1,50 @@
-import './App.css'
-import { Routes, Route, Navigate } from 'react-router-dom'
-import ChamadosRcnPage from './pages/ChamadosRcnPage'
-import LoginPage from './pages/LoginPage'
-import EquipamentosPage from './pages/EquipamentosPage'
-import CertificadosPage from './pages/CertificadosPage'
-import LicencasOfficePage from './pages/LicencasOfficePage'
-import UsuariosPage from './pages/UsuariosPage'
-import SystemInfoPage from './pages/SystemInfoPage'
-import MonitoramentoPage from './pages/MonitoramentoPage'
-import ProtectedRoute from './routes/ProtectedRoute'
-import Layout from './components/Layout'
-import HomePage from './pages/HomePage'
-import PerfilPage from './pages/PerfilPage'
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./contexts/AuthContext";
+import Login from "./pages/Login";
+import MainLayout from "./components/layout/MainLayout";
+import Dashboard from "./pages/Dashboard";
+import Certificados from "./pages/Certificados";
+import Equipamentos from "./pages/Equipamentos";
+import Licencas from "./pages/Licencas";
+import Usuarios from "./pages/Usuarios";
+import Monitoramento from "./pages/Monitoramento";
+import Perfil from "./pages/Perfil";
+import ChamadosRCN from "./pages/ChamadosRcn";
+import ChamadosInternos from "./pages/ChamadosInternos";
+import NotFound from "./pages/NotFound";
 
-function App() {
-  return (
-    <div>
-      <Routes>
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/home" element={<ProtectedRoute><Layout><HomePage /></Layout></ProtectedRoute>} />
-          <Route path="/perfil" element={<ProtectedRoute><Layout><PerfilPage /></Layout></ProtectedRoute>} />
-          <Route path="/chamados" element={<ProtectedRoute><Layout><ChamadosRcnPage /></Layout></ProtectedRoute>} />
-          <Route path="/equipamentos" element={<ProtectedRoute><Layout><EquipamentosPage /></Layout></ProtectedRoute>} />
-          <Route path="/certificados" element={<ProtectedRoute><Layout><CertificadosPage /></Layout></ProtectedRoute>} />
-          <Route path="/licencas" element={<ProtectedRoute><Layout><LicencasOfficePage /></Layout></ProtectedRoute>} />
-          <Route path="/usuarios" element={<ProtectedRoute><Layout><UsuariosPage /></Layout></ProtectedRoute>} />
-          <Route path="/system-info" element={<ProtectedRoute><Layout><SystemInfoPage /></Layout></ProtectedRoute>} />
-          <Route path="/monitoramento" element={<ProtectedRoute><Layout><MonitoramentoPage /></Layout></ProtectedRoute>} />
-          <Route path="*" element={<div>Página não encontrada</div>} />
-        </Routes>
-    </div>
-  )
-}
+const queryClient = new QueryClient();
 
-export default App
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/home" element={<MainLayout />}>
+              <Route index element={<Dashboard />} />
+              <Route path="certificados" element={<Certificados />} />
+              <Route path="equipamentos" element={<Equipamentos />} />
+              <Route path="licencas" element={<Licencas />} />
+              <Route path="usuarios" element={<Usuarios />} />
+              <Route path="monitoramento" element={<Monitoramento />} />
+              <Route path="perfil" element={<Perfil />} />
+              <Route path="chamados-rcn" element={<ChamadosRCN />} />
+              <Route path="chamados-internos" element={<ChamadosInternos />} />
+            </Route>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </TooltipProvider>
+  </QueryClientProvider>
+);
+
+export default App;
